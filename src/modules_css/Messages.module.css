@@ -1,0 +1,52 @@
+.messageBody {
+    max-width: 75%;
+  
+    padding: 1rem 0 1rem 0;
+  }
+  
+.messageBodyLeft {
+    display: flex;
+    align-items: center;
+}
+  
+.messageBodyRigth {
+    display: flex;
+    align-items: center;
+    align-self: flex-end;
+}
+  
+.messageBodyImg {
+    width: auto;
+    max-width: 100%;
+    height: auto;
+    max-height: 25rem;
+  
+    border-radius: 0.75rem;
+}
+  
+.messageBodyText {
+    border-radius: 0.75rem;
+    padding: 0.5rem;
+  
+    font-weight: 400;
+    font-size: 1rem;
+    line-height: 1.5rem;
+  
+    background-color: rgb(255, 255, 255);;
+}
+/*Date*/
+.messageDate {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    padding: 1rem 0 1rem 0;
+}
+
+.messageDateSpan {
+    border-radius: 0.65rem;
+
+    padding: 0.3rem;
+
+    background-color: rgba(171, 167, 167, 1);
+}

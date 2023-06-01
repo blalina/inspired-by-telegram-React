@@ -1,0 +1,129 @@
+/*Left header, Dropdown*/
+.dropdownMenu, .clearButton, .lupaButton, .callButton, .moreVertButton {
+  width: 2.5rem;
+  height: 2.5rem;
+
+  border-radius: 50%;
+  background-color: rgba(0, 0, 0, 0);
+
+  border: none;
+  box-shadow: none;
+
+  cursor: pointer;
+}
+
+.dropdownMenu {
+  position: relative;
+
+  padding: 5px;
+
+  cursor: pointer;
+}
+
+.dropdownMenu:hover, .lupaButton:hover, .callButton:hover, .moreVertButton:hover {
+  background-color: rgba(244, 244, 245);
+}
+
+.clearButton {
+  display: none;
+}
+
+.showClearButton {
+  display: block;
+} /*относится к классу clearButton*/
+
+.clearButton {
+  position: absolute;
+  top: 0.1rem;
+  right: 0;
+
+  cursor: pointer;
+}
+
+/*Стиль attachment-modal__button_icon-photo для  Modal window*/
+.moodButton, .attachFileButton, .attachPhotoButton {
+  width: 2.5rem;
+  height: 2.5rem;
+  
+  border-radius: 50%;
+  border: 0;
+  padding: 0;
+  
+  background-color: rgba(255, 255, 255);
+  
+  cursor: pointer;
+}
+  
+.moodButton svg:hover, .attachFileButton svg:hover {
+  color: rgb(74, 157, 238);
+}
+  
+.voiceButton {
+  position: relative;
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 50%;
+  border: 0;
+
+  margin-left: 1rem;
+
+  background-color: rgba(255, 255, 255);
+
+  cursor: pointer;
+}
+  
+.voiceButton:hover, .sendButton:hover {
+  background-color: rgb(74, 157, 238);
+}
+
+.voiceButton:hover svg, .sendButton:hover svg {
+  color: rgba(242, 242, 243, 0.976);
+}
+
+.footer__button_voice__svg_hidden {
+  display: none;
+}
+
+.sendButton {
+  position: relative;
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 50%;
+  border: 0;
+
+  margin-left: 1rem;
+
+  background-color: rgba(255, 255, 255);
+
+  cursor: pointer;
+}
+
+.sendButton svg {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+
+  color: rgb(74, 157, 238);
+}
+
+.sendButtonFile {
+  height: 2.25rem;
+  width: 16rem;
+
+  font-size: 0.875rem;
+  text-align: start;
+
+  cursor: pointer;
+  border: none;
+  border-radius: 0.5rem;
+
+  padding-left: 1rem;
+
+  background-color: rgb(255, 255, 255);
+
+  cursor: pointer;
+}
+
+.sendButtonFile:hover {
+  background-color: rgba(244, 244, 245);
+}

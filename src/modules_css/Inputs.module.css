@@ -1,0 +1,17 @@
+/*Dropdown menu*/
+.searchInput {
+    width: 100%;
+    height: 2.5rem;
+    margin-left: 0.875rem;
+    padding-left: 2.5rem;
+
+    border-radius: 1.375rem;
+    border: none;
+    box-shadow: none;
+
+    background-color: rgba(244, 244, 245);
+}
+
+.attachModalInputFile {
+    display: none;
+}

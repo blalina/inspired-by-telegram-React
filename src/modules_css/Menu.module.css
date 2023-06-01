@@ -1,0 +1,72 @@
+/*Dropdown menu*/
+.dropdownMenuNav {
+    display: none;
+}
+
+.dropdownMenuNavActive {
+    display: inline-block;
+}
+
+.dropdownMenuUl {
+    display: flex;
+    flex-direction: column;
+
+    position: absolute;
+    top: 3rem;
+    left: 1rem;
+
+    min-width: 17rem;
+    max-height:23rem;
+
+    font-weight: 500;
+    font-size: 0.875rem;
+
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 0.5rem;
+
+    cursor: pointer;
+}
+
+.dropdownMenuLi {
+    display: flex;
+    align-items: center;
+
+    list-style: none;
+
+    margin: 0.125rem 0.25rem;
+    padding: 0.25rem;
+}
+
+.dropdownMenuLi:hover {
+    border-radius: 0.5rem;
+    background-color: rgba(244, 244, 245);
+}
+
+.dropdownMenuA {
+    text-decoration: none;
+}
+
+.dropdownMenuLiPK {
+    margin-left: 0.9rem;
+    margin-right: 1.55rem;
+
+    color: rgb(112, 117, 121);
+}
+
+.dropdownMenuLiPW {
+    margin-left: 0.8rem;
+    margin-right: 1.4rem;
+
+    color: rgb(112, 117, 121);
+}
+
+.dropdownMenuLiTextBelow {
+    text-align: center;
+
+    font-size: 13px;
+    font-weight: 400;
+
+    padding: 0.5rem 0;
+
+    color: rgb(112, 117, 121);
+}

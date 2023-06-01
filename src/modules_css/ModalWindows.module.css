@@ -1,0 +1,23 @@
+.attachModalContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    width: 100%;
+    max-width: 19rem;
+    height: 5rem;
+
+    /*  Центрируем */
+    position: fixed;
+    top: 85%;
+    left: 67.4%;
+    transform: translate(-50%, -50%);
+
+    background-color: rgb(255, 255, 255);
+    box-shadow: 0 3px 10px -.5px rgba(0, 0, 0, .2); 
+    border-radius: 0.5rem;
+}
+
+.attachModalContainerHidden {
+    display: none;
+}

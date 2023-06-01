@@ -1,0 +1,164 @@
+.rightColumn {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  
+  position: relative;
+  
+  /* width: 100%; */
+  height: 100%;
+  
+  box-shadow: 0 2px 2px rgba(212, 212, 212, 1);
+  background: url(../assets/images/background.jpeg) center no-repeat;
+  background-size: cover;
+}
+
+/*NavBar*/
+.navBar {
+  display: flex;
+  width: 100%;
+  height: 3.5rem;
+
+  visibility: hidden;
+
+  box-shadow: 0 1px 1px rgba(114,114,114,0.168627);
+
+  z-index: 1;
+
+  padding-top: 0.5rem;
+  padding-right: max(1rem);
+  padding-bottom: 0.5rem;
+  padding-left: max(1.5rem);
+
+  background-color: rgb(255, 255, 255);
+}
+
+.navBar_active {
+  visibility: visible;
+}
+
+.navBarTools {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+
+  position: absolute;
+  top: 0.5rem;
+  right: 0;
+}
+
+/*MessageWindow*/
+.messageWindow {
+  display: flex;
+  flex-direction: column;
+
+  min-height: 0px;
+  height: 100%;
+}
+
+/*MessageListWrapper*/
+.messageListWrapper {
+  min-height: 0px;
+  height: 100%;
+}
+
+.messageListScrollableArea {
+  display: flex;
+  justify-content: end;
+  flex-direction: column-reverse;
+
+  width: 100%;
+  height: 100%;
+
+  overflow-y: auto;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+}
+
+.messageList {
+  display: flex;
+  justify-content: center;
+  align-items: end;
+
+  width: 100%;
+}
+
+.messageContainer {
+  display: flex;
+  flex-direction: column;
+  visibility: hidden;
+
+  width: 39rem;
+  max-width: 100%;
+}
+
+.messageContainer_active {
+  visibility: visible;
+}
+
+.messageDate {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  padding: 1rem 0 1rem 0;
+}
+
+.messageDateSpan {
+  border-radius: 0.65rem;
+
+  padding: 0.3rem;
+
+  background-color: rgba(171, 167, 167, 1);
+}
+
+/*RightColumnFooter*/
+.rightColumnFooter {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+
+  visibility: hidden;
+
+  padding: 1.5rem;
+}
+
+.rightColumnFooter_active {
+  visibility: visible;
+}
+
+.rightColumnFooterTools {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 35rem;
+  max-width: 80%;
+  max-height: calc(50vh - 3.5rem);
+  min-height: 3.5rem;
+
+  border-radius: 0.75rem;
+
+  overflow-y: auto;
+  scroll-behavior: smooth;
+
+  background-color: rgba(255, 255, 255);
+}
+
+.inputMessageFooter {
+  width: 29rem;
+
+  font-size: 1rem;
+
+  border: 0;
+
+  padding-left: 1rem;
+
+  outline:none;
+}
+
+[contentEditable=true]:empty:not(:focus):before{
+  content:attr(data-text);
+  color: rgba(112, 117, 121, 1);;
+}
