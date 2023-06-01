@@ -5,4 +5,4 @@ Users can send messages and attach files to their messages. Attached files are d
 
 ## GitHub Pages
 
-GitHub pages - 
+GitHub pages - https://blalina.github.io/inspired-by-telegram-React/
