@@ -43,55 +43,48 @@ export function NavBarTools() {
 export function MessageWindow({ show }) {
     const [post, setPost] = useState('');
     const [file, setFile] = useState('');
-    const [posts, setPosts] = useState([
-        {
-            type: "message",
-            id: 0,
-            text: "",
-            nameImg: "mamis_dumplongs",
-            position: "left",
-            date: "March 12",
-            files: "",
-        },
-        {
-            type: "message",
-            id: 1,
-            text: "Who knows? Is this the start of something wonderful and new? Or one more dream that I cannot make true? Gav gav gav Gav Gav gav Gav gav gav",
-            nameImg: "",
-            position: "left",
-            date: "March 12",
-            files: "",
-        },
-        {
-            type: "message",
-            id: 2,
-            text: "Who knows? All that is really worth the doing is what we do for others. Everybody has won, and all must have prizes. If you don't think, you shouldn't talk. Gav Gav gav Gav gav gav Who in the world am I? Ah, that's the great puzzle.",
-            nameImg: "",
-            position: "right",
-            date: "March 23",
-            files: "",
-        },
-        {
-            type: "message",
-            id: 3,
-            text: "I will follow you into the darkness",
-            nameImg: "",
-            position: "left",
-            date: "April 4",
-            files: "",
-        },
-        {
-            type: "message",
-            id: 4,
-            text: "My lover's got humour",
-            nameImg: "",
-            position: "right",
-            date: "April 5",
-            files: "",
-        },
-    ]);
 
-    const inputRef = useRef(null);
+    const inputRef = useRef(null); //inputRef
+
+    const [posts, setPosts] = useState([]);
+    // const [data, setData] = useState([]);
+    // const [loading, setLoading] = useState(false);
+
+    // useEffect(() => {
+    //     fetch('http://localhost:4000/messages/0', {
+    //         method: 'POST',
+    //         headers: {
+    //             'Content-type': 'application/json'
+    //         },
+    //         body: JSON.stringify(),
+    //     })
+    //         .then(response => {
+    //             if (!response.ok) {
+    //                 throw new Error("HTTP status " + response.status);
+    //             }
+    //             return response.json();
+    //         })
+    //         .then(data => {
+    //             console.log("Data:", data);
+    //         })
+    //         .catch(error => console.log('Error fatching data:', error))
+    // }, []);
+
+    useEffect(() => {
+        fetch('http://localhost:4000/messages/0')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("HTTP status " + response.status);
+                }
+                return response.json();
+            })
+            .then(data => {
+                setPosts(data.map((message) => ({...message, type: "message"})));
+            })
+            .catch(error => {
+                console.log('Error fatching data:', error)
+            })
+    }, []);
 
     const month = {
         0: 'January',
@@ -113,17 +106,14 @@ export function MessageWindow({ show }) {
     const currentDate = currentTime.getDate();
     const monthToday = `${month[currentMonth]} ${currentDate}`;
 
-    const addPost = () => {
-        
+    const addPost = () => {  
         if (post !== "") {
             setPosts([...posts, {
-                type: "message",
                 id: posts.length,
+                author: 999999,
                 text: post,
-                nameImg: "",
-                position: "right",
                 date: monthToday,
-                files: file,
+                type: "message",
             }]);
             setPost("");
             setFile("");
@@ -150,21 +140,30 @@ export function MessageWindow({ show }) {
                 setPosts([...posts, {
                     type: "message",
                     id: posts.length,
+                    author: 999999,
                     text: post,
-                    nameImg: "",
-                    position: "right",
+                    // nameImg: "",
+                    // position: "right",
                     date: monthToday,
-                    files: reader.result,
+                    // files: reader.result,
+                    attachment: {
+                        type: "base64",
+                        value: reader.result,
+                    }
                 }]);
             }
         };
+
         reader.readAsDataURL(event.target.files[0]);
+        console.log("event.target", event.target.files[0]);
     };
 
     const handleUploadClick = () => {
         inputRef.current.click();
         inputRef.current.value = null;
     };
+
+    // перетаскивание файла
 
     return (
         <div className={classes.messageWindow}>
@@ -244,7 +243,6 @@ export function RightColumnFooter({ post, onContent, addPost, onKeyDown, inputRe
                 <AttachFileButton onClick={handleClick} />
                 <ModalWindowToAttachAFile show={active} 
                     inputRef={inputRef} onChange={onChange}
-
                     file={file} onClick={onClick}
                 />
             </div>

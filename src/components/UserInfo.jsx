@@ -1,129 +1,45 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import { useRef } from "react";
 import classes from "../modules_css/UserInfo.module.css";
+import { UserContext } from "../Context";
 
-const usersInfo = [
-    {
-        id: 0,
-        name: 'Princess',
-        surname: 'Tiabeanie',
-        lastMessage: 'Gav gav gav',
-        nameImg: 'bean',
-    },
-    {
-        id: 1,
-        name: 'Oleg',
-        surname: 'Drapeza',
-        lastMessage: 'Bean, good girl!',
-        nameImg: 'lovely_boy',
-    },
-    {
-        id: 2,
-        name: 'Alina',
-        surname: 'Blokhina',
-        lastMessage: 'I think game development is the best coding job. You have to use your imagination and realize what you have in mind. You create an entire world with characters and objects, thinking about in-game mechanics. Oh, it’s a whole art form.',
-        nameImg: 'avatar2',
-    },
-    {
-        id: 3,
-        name: '1ne',
-        surname: 'here',
-        lastMessage: 'Two',
-        nameImg: 'avatar2',
-    },
-    {
-        id: 4,
-        name: 'Cornfield',
-        surname: 'Chase',
-        lastMessage: 'Three',
-        nameImg: 'avatar2',
-    },
-    {
-        id: 5,
-        name: 'Day',
-        surname: 'one',
-        lastMessage: 'Four',
-        nameImg: 'avatar2',
-    },
-    {
-        id: 6,
-        name: '22',
-        surname: 'April',
-        lastMessage: 'Five',
-        nameImg: 'avatar2',
-    },
-    {
-        id: 7,
-        name: 'afraid of',
-        surname: 'Time',
-        lastMessage: 'Six',
-        nameImg: 'avatar2',
-    },
-    {
-        id: 8,
-        name: 'TodayIsFriday',
-        surname: 'MaybeItsJustLongName',
-        lastMessage: 'Seven',
-        nameImg: 'avatar2',
-    },
-    {
-        id: 9,
-        name: 'Алина',
-        surname: 'Blokhina',
-        lastMessage: 'Eight',
-        nameImg: 'avatar2',
-    },
-    {
-        id: 10,
-        name: 'Username',
-        surname: 'here',
-        lastMessage: 'Nine',
-        nameImg: 'avatar2',
-    },
-    {
-        id: 11,
-        name: 'Алина',
-        surname: 'Блохина',
-        lastMessage: 'Ten',
-        nameImg: 'avatar2',
-    },
-    {
-        id: 12,
-        name: 'Олег',
-        surname: 'Драпеза',
-        lastMessage: 'Eleven',
-        nameImg: 'avatar2',
-    },
-    {
-        id: 13,
-        name: 'Иван',
-        surname: 'Блохин',
-        lastMessage: 'Twelve',
-        nameImg: 'avatar2',
-    },
-];
-
-function getImageUrl(nameImg) {
-    return new URL(`../assets/images/${nameImg}.jpeg`, import.meta.url).href
+export function getImageUrl(avatarImg) {
+    return new URL(`../assets/images/${avatarImg}.jpeg`, import.meta.url).href;
 }
 
 export function UserInfo(props) {
     const { value } = props;
     const chatListTitle = useRef();
+    
+    const { userInfoAPI, setuserInfoAPI } = useContext(UserContext);
+    
+    useEffect(() => {
+        fetch('http://localhost:4000/users/all')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("HTTP status " + response.status);
+                }
+                return response.json();
+            })
+            .then(data => {
+                setuserInfoAPI(data);
+            })
+            .catch(error => console.log('Error fatching data:', error))
+    }, []);
 
-    const blockWithUserInfo = usersInfo.filter(({ name, surname }) => {
+    const blockWithUserInfo = userInfoAPI.filter(({ name, surname }) => {
         const valueFromTheInput = value.trim().toLowerCase();
         const remadeName = name.toLowerCase().search(valueFromTheInput);
         const remadeSurname = surname.toLocaleLowerCase().search(valueFromTheInput);
         if ((remadeName !== -1) || (remadeSurname !== -1)) {
             return true;
         } return false;
-    }).map(({ id, nameImg, name, surname, lastMessage }) => (
+    }).map(({ id, avatarImg, name, surname, lastMessage }) => (
         <div key={id} className={classes.chatListUser}>
             <div className="chatListAvatar">
                 <img
                     className={classes.chatListAvatarImg}
-                    src={getImageUrl(nameImg)}
+                    src={getImageUrl(avatarImg)}
                     alt="avatar"
                 />
             </div>
@@ -142,19 +58,31 @@ export function UserInfo(props) {
 }
 
 export function UserAvatar() {
+    const { userInfoAPI } = useContext(UserContext);
+
+    if (userInfoAPI.length === 0) {
+        return "...";
+    }
+
     return (
             <img
                 className={`${classes.navBarHeaderAvatarImg} ${classes.avatarImg}`}
-                src={getImageUrl(usersInfo[0].nameImg)}
+                src={getImageUrl(userInfoAPI[0].avatarImg)}
                 alt="avatar"
             />
     );
 }
 
 export function FullName() {
+    const { userInfoAPI } = useContext(UserContext);
+
+    if (userInfoAPI.length === 0) {
+        return "...";
+    }
+
     return (
         <div className="middle-header__title">
-            <h3>{`${usersInfo[0].name} ${usersInfo[0].surname}`}</h3>
+            <h3>{`${userInfoAPI[0].name} ${userInfoAPI[0].surname}`}</h3>
         </div>
     );
 }

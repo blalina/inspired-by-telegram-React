@@ -26,6 +26,7 @@ export function AttachModalInputFile({onChange, inputRef}) {
             type="file"
             ref={inputRef}
             onChange={onChange}
+            multiple
         />
     );
 }

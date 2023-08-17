@@ -1,17 +1,16 @@
 import React from "react";
 import classes from "../modules_css/Messages.module.css";
 
-function getImageUrl(nameImg) {
-    return new URL(`../assets/images/${nameImg}.png`, import.meta.url).href;
+export function getImageUrl(value) {
+    return new URL(`../assets/images/${value}.png`, import.meta.url).href;
 }
 
-export function MessageBody({ list }) {
+export function MessageBody({ list }) {    
     let currentDate;
     
     const listWithDates = list
     .reduce((result, item) => {
         if (item.type === 'message' && (!currentDate || item.date !== currentDate)) {
-
             currentDate = item.date;
 
             result.push({
@@ -23,8 +22,9 @@ export function MessageBody({ list }) {
 
         return result;
     }, []);
+    console.log('list', list);
 
-    return listWithDates.map(({ id, text, nameImg, position, date, type, files }) => {
+    return listWithDates.map(({ id, text, author, attachment, date, type }) => {
         if (type === 'date-separator') {
             return (
                 <div key={date} className={classes.messageDate}>
@@ -32,12 +32,13 @@ export function MessageBody({ list }) {
                 </div>
             );
         }
-
-        const haveNameImg = (nameImg || files)
-            ? <img className={classes.messageBodyImg} src={files ? files : getImageUrl(nameImg)} alt="user photo" /> 
+        // const checkAttachment = (attachment !== undefined) ? console.log("attachment.type:", attachment.type, ", attachment.value:", attachment.value) : undefined;
+        // console.log(checkAttachment);
+        const haveNameImg = attachment
+            ? <img className={classes.messageBodyImg} src={attachment.type === 'image' ? getImageUrl(attachment.value) : attachment.value} alt="user photo" /> 
             : <p className={classes.messageBodyText}>{text}</p>;
 
-        const leftPosition = position === "left" ? classes.messageBodyLeft : classes.messageBodyRigth;
+        const leftPosition = author === 0 ? classes.messageBodyLeft : classes.messageBodyRigth;
         
         return (
             <div key={id} className={`${classes.messageBody} ${leftPosition}`}>
@@ -46,4 +47,3 @@ export function MessageBody({ list }) {
         );
     });
 }
-  
