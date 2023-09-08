@@ -22,7 +22,6 @@ export function MessageBody({ list }) {
 
         return result;
     }, []);
-    console.log('list', list);
 
     return listWithDates.map(({ id, text, author, attachment, date, type }) => {
         if (type === 'date-separator') {
@@ -32,8 +31,7 @@ export function MessageBody({ list }) {
                 </div>
             );
         }
-        // const checkAttachment = (attachment !== undefined) ? console.log("attachment.type:", attachment.type, ", attachment.value:", attachment.value) : undefined;
-        // console.log(checkAttachment);
+
         const haveNameImg = attachment
             ? <img className={classes.messageBodyImg} src={attachment.type === 'image' ? getImageUrl(attachment.value) : attachment.value} alt="user photo" /> 
             : <p className={classes.messageBodyText}>{text}</p>;
@@ -44,6 +42,6 @@ export function MessageBody({ list }) {
             <div key={id} className={`${classes.messageBody} ${leftPosition}`}>
                 {haveNameImg}
             </div>
-        );
+        );  
     });
 }

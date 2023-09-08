@@ -43,35 +43,12 @@ export function NavBarTools() {
 export function MessageWindow({ show }) {
     const [post, setPost] = useState('');
     const [file, setFile] = useState('');
+    const [posts, setPosts] = useState([]);
 
     const inputRef = useRef(null); //inputRef
 
-    const [posts, setPosts] = useState([]);
-    // const [data, setData] = useState([]);
-    // const [loading, setLoading] = useState(false);
-
-    // useEffect(() => {
-    //     fetch('http://localhost:4000/messages/0', {
-    //         method: 'POST',
-    //         headers: {
-    //             'Content-type': 'application/json'
-    //         },
-    //         body: JSON.stringify(),
-    //     })
-    //         .then(response => {
-    //             if (!response.ok) {
-    //                 throw new Error("HTTP status " + response.status);
-    //             }
-    //             return response.json();
-    //         })
-    //         .then(data => {
-    //             console.log("Data:", data);
-    //         })
-    //         .catch(error => console.log('Error fatching data:', error))
-    // }, []);
-
     useEffect(() => {
-        fetch('http://localhost:4000/messages/0')
+        fetch('http://localhost:4000/messages/0') // прокидывать id выбранного пользователя http://localhost:4000/messages/ID
             .then(response => {
                 if (!response.ok) {
                     throw new Error("HTTP status " + response.status);
@@ -84,7 +61,68 @@ export function MessageWindow({ show }) {
             .catch(error => {
                 console.log('Error fatching data:', error)
             })
-    }, []);
+    }, []); 
+    // отменять предыдущий запрос при смене id выбранного пользователя abortController
+
+    const postRequestCreation = (reader) => {
+        // const reader = new FileReader();
+        const messageBody = {
+            id: posts.length,
+            author: 999999,
+            type: "message",
+            text: post, //то что в инпуте - state
+            date: monthToday, // дата сегодня
+        };
+
+        if (reader && reader.result) {
+            messageBody.attachment = {
+                type: 'base64',
+                value: reader.result
+            }; // { type: 'base64', value из инпута файла}
+        }
+
+        // optimistic UI - показываем что добавление сообщения прошло успешно до реального ответа от бэкенда
+        setPosts((currentPost) => [...currentPost, messageBody]);
+
+        // сюда тоже нужно прокидывать id того с кем ведется переписка http://localhost:4000/messages/ID
+        return fetch('http://localhost:4000/messages/0', {
+            method: 'POST',
+            headers: {
+                'Content-type': 'application/json'
+            },
+            body: JSON.stringify(messageBody),
+        })
+            .then(response => {
+                            if (!response.ok) {
+                                throw new Error("HTTP status " + response.status);
+                            }
+                            return response.json();
+                        })
+            .then(createdMessage => {
+                            console.log("Created Message:", createdMessage); // createdMessage - это данные с бека
+                            // в setPosts - ALL_MESSAGES_ARRAY (ONE_MESSAGE) - это данные клиента, то что хранится в стейте
+                            setPosts((ALL_MESSAGES_ARRAY) => ALL_MESSAGES_ARRAY.map((ONE_MESSAGE) => {
+                                if (ONE_MESSAGE.id === messageBody.id) {
+                                    return {
+                                        ...ONE_MESSAGE, 
+                                        ...createdMessage
+                                    }
+                                }
+                                return ONE_MESSAGE;
+                            }))
+                            // Обновить сообщение потому что мы получили настоящий id
+                        })
+            .catch(error => {
+                console.log('Error fatching data:', error);
+                setPosts((allMessageArray) => allMessageArray.filter((oneMessage) => {
+                    if (oneMessage.id === messageBody.id) {
+                        return false;
+                    }
+                    return true;
+                }));
+                // Удалить сообщенеи, потому что оно не доставлено
+            })
+    }
 
     const month = {
         0: 'January',
@@ -106,15 +144,9 @@ export function MessageWindow({ show }) {
     const currentDate = currentTime.getDate();
     const monthToday = `${month[currentMonth]} ${currentDate}`;
 
-    const addPost = () => {  
+    const addPost = () => {
         if (post !== "") {
-            setPosts([...posts, {
-                id: posts.length,
-                author: 999999,
-                text: post,
-                date: monthToday,
-                type: "message",
-            }]);
+            postRequestCreation();
             setPost("");
             setFile("");
         }
@@ -135,22 +167,9 @@ export function MessageWindow({ show }) {
         const reader = new FileReader();
         reader.onload = () => {
             if (reader.readyState === 2) {
+                postRequestCreation(reader);
                 setFile("");
                 setPost("");
-                setPosts([...posts, {
-                    type: "message",
-                    id: posts.length,
-                    author: 999999,
-                    text: post,
-                    // nameImg: "",
-                    // position: "right",
-                    date: monthToday,
-                    // files: reader.result,
-                    attachment: {
-                        type: "base64",
-                        value: reader.result,
-                    }
-                }]);
             }
         };
 
@@ -250,4 +269,3 @@ export function RightColumnFooter({ post, onContent, addPost, onKeyDown, inputRe
         </div>
     );
 }
-
