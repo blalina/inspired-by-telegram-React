@@ -17,8 +17,12 @@
     background-color: rgb(255, 255, 255);
 }
 
-.chatListUser:hover {
+.chatListUser:not(.chatListUser_active):hover {
     background-color: rgba(244, 244, 245);
+}
+
+.chatListUser_active {
+    background-color: rgb(74, 157, 238);
 }
 
 .chatListUser.hidden {
@@ -28,11 +32,18 @@
 .userFullName {
     font-weight: 500;
     font-size: 17px;
-    color: rgba(3, 3, 3);
 
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+.userFullName_normal {
+    color: rgba(3, 3, 3);
+}
+
+.userFullName_selected {
+    color: rgb(255, 255, 255);
 }
 
 .chatListLastMessage {
@@ -42,8 +53,16 @@
 
     font-weight: 400;
     font-size: 15px;
+}
+
+.chatListLastMessage_normal {
     color: rgba(112, 117, 121, 1);
 }
+
+.chatListLastMessage_selected {
+    color: rgb(255, 255, 255);
+}
+
 
 /*Avatar*/
 .chatListAvatarImg {
@@ -53,6 +72,7 @@
     margin-right: 0.625rem;
 
     border-radius: 50%;
+    object-fit: cover;
 }
 
 .navBarHeaderAvatarImg {
@@ -64,6 +84,7 @@
 
 .avatarImg {
     border-radius: 50%;
+    object-fit: cover;
 }
 
 /*UserStatus*/

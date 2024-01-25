@@ -7,8 +7,8 @@ import { UserContext } from "./Context";
 
 export function App() {
   const [active, setActive] = useState(false);
-  // состояние для списка инфо про юзеров с сервера
   const [userInfoAPI, setuserInfoAPI] = useState([]);
+  const [userId, setUserId] = useState(null);
 
   const handleClick = () => {
     if (active !== true) {
@@ -17,7 +17,7 @@ export function App() {
   };
 
   return (
-    <UserContext.Provider value={{ userInfoAPI, setuserInfoAPI }}>
+    <UserContext.Provider value={{ userInfoAPI, setuserInfoAPI, userId, setUserId }}>
       <div className="wrapper">
         <LeftColumn onClick={handleClick} />
         <RightColumn show={active} />
