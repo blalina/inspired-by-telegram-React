@@ -8,10 +8,9 @@ export function getImageUrl(avatarImg) {
 }
 
 export function UserInfo(props) {
+    const { userId, userInfoAPI, setUserId, setuserInfoAPI } = useContext(UserContext);
     const { value } = props;
     const chatListTitle = useRef();
-    
-    const { userInfoAPI, setuserInfoAPI } = useContext(UserContext);
     
     useEffect(() => {
         fetch('http://localhost:4000/users/all')
@@ -34,8 +33,10 @@ export function UserInfo(props) {
         if ((remadeName !== -1) || (remadeSurname !== -1)) {
             return true;
         } return false;
-    }).map(({ id, avatarImg, name, surname, lastMessage }) => (
-        <div key={id} className={classes.chatListUser}>
+    }).map(({ id, avatarImg, name, surname, lastMessage }) => {
+        return (<div key={id} className={id === userId ? `${classes.chatListUser} ${classes.chatListUser_active}` : classes.chatListUser} 
+            onClick={() => {setUserId(id);}}
+        >
             <div className="chatListAvatar">
                 <img
                     className={classes.chatListAvatarImg}
@@ -45,44 +46,51 @@ export function UserInfo(props) {
             </div>
             <div className={classes.chatListInfo}>
                 <div className="chatListTitle" ref={chatListTitle}>
-                    <h3 className={classes.userFullName} value={value}>{name} {surname}</h3>
+                    <h3 className={id !== userId ? `${classes.userFullName} ${classes.userFullName_normal}` : `${classes.userFullName} ${classes.userFullName_selected}`} 
+                        value={value}
+                    >
+                        {name} {surname}
+                    </h3>
                 </div>
                 <div className="chatListSubtitle">
-                    <p className={classes.chatListLastMessage}>{lastMessage}</p>
+                    <p className={id !== userId ? `${classes.chatListLastMessage} ${classes.chatListLastMessage_normal}` : `${classes.chatListLastMessage} ${classes.chatListLastMessage_selected}`}
+                    >
+                        {lastMessage}
+                    </p>
                 </div>
             </div>
-        </div>
-    ));
+        </div>);
+    });
 
     return (blockWithUserInfo);
 }
 
 export function UserAvatar() {
-    const { userInfoAPI } = useContext(UserContext);
+    const { userInfoAPI, userId } = useContext(UserContext);
 
-    if (userInfoAPI.length === 0) {
+    if (userInfoAPI.length === 0 || !userInfoAPI[userId]) {
         return "...";
     }
 
     return (
             <img
                 className={`${classes.navBarHeaderAvatarImg} ${classes.avatarImg}`}
-                src={getImageUrl(userInfoAPI[0].avatarImg)}
+                src={getImageUrl(userInfoAPI[userId].avatarImg)}
                 alt="avatar"
             />
     );
 }
 
 export function FullName() {
-    const { userInfoAPI } = useContext(UserContext);
+    const { userInfoAPI, userId } = useContext(UserContext);
 
-    if (userInfoAPI.length === 0) {
+    if (userInfoAPI.length === 0 || !userInfoAPI[userId]) {
         return "...";
     }
 
     return (
         <div className="middle-header__title">
-            <h3>{`${userInfoAPI[0].name} ${userInfoAPI[0].surname}`}</h3>
+            <h3>{`${userInfoAPI[userId].name} ${userInfoAPI[userId].surname}`}</h3>
         </div>
     );
 }

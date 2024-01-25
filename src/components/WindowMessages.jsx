@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import classes from "../modules_css/WindowMessages.module.css";
 import { AttachFileButton, CallButton, LupaButton, MoodButton, MoreVertButton, SendButton, VoiceButton } from "./Buttons";
 import { FullName, UserAvatar, UserStatus } from "./UserInfo";
 import { useRef } from "react";
 import { MessageBody } from "./Messages";
 import { ModalWindowToAttachAFile } from "./ModalWindows";
+import { UserContext } from "../Context";
 
 export function RightColumn({ show }) {
     return (
@@ -45,10 +46,13 @@ export function MessageWindow({ show }) {
     const [file, setFile] = useState('');
     const [posts, setPosts] = useState([]);
 
-    const inputRef = useRef(null); //inputRef
+    const inputRef = useRef(null);
 
+    const { userId } = useContext(UserContext);
     useEffect(() => {
-        fetch('http://localhost:4000/messages/0') // прокидывать id выбранного пользователя http://localhost:4000/messages/ID
+        const abortController = new AbortController();
+
+        fetch(`http://localhost:4000/messages/${userId}`, { signal: abortController.signal })
             .then(response => {
                 if (!response.ok) {
                     throw new Error("HTTP status " + response.status);
@@ -59,69 +63,65 @@ export function MessageWindow({ show }) {
                 setPosts(data.map((message) => ({...message, type: "message"})));
             })
             .catch(error => {
-                console.log('Error fatching data:', error)
+                if (!abortController.signal.aborted) {
+                    console.log('Error fatching data:', error);
+                }
             })
-    }, []); 
-    // отменять предыдущий запрос при смене id выбранного пользователя abortController
 
-    const postRequestCreation = (reader) => {
-        // const reader = new FileReader();
+            return () => {
+                abortController.abort();
+            }
+    }, [userId]);
+
+    const postRequestCreation = async (reader) => {
         const messageBody = {
             id: posts.length,
             author: 999999,
             type: "message",
-            text: post, //то что в инпуте - state
-            date: monthToday, // дата сегодня
+            text: post,
+            date: monthToday,
         };
 
         if (reader && reader.result) {
             messageBody.attachment = {
                 type: 'base64',
                 value: reader.result
-            }; // { type: 'base64', value из инпута файла}
+            };
         }
 
-        // optimistic UI - показываем что добавление сообщения прошло успешно до реального ответа от бэкенда
         setPosts((currentPost) => [...currentPost, messageBody]);
 
-        // сюда тоже нужно прокидывать id того с кем ведется переписка http://localhost:4000/messages/ID
-        return fetch('http://localhost:4000/messages/0', {
-            method: 'POST',
-            headers: {
-                'Content-type': 'application/json'
-            },
-            body: JSON.stringify(messageBody),
-        })
-            .then(response => {
-                            if (!response.ok) {
-                                throw new Error("HTTP status " + response.status);
-                            }
-                            return response.json();
-                        })
-            .then(createdMessage => {
-                            console.log("Created Message:", createdMessage); // createdMessage - это данные с бека
-                            // в setPosts - ALL_MESSAGES_ARRAY (ONE_MESSAGE) - это данные клиента, то что хранится в стейте
-                            setPosts((ALL_MESSAGES_ARRAY) => ALL_MESSAGES_ARRAY.map((ONE_MESSAGE) => {
-                                if (ONE_MESSAGE.id === messageBody.id) {
-                                    return {
-                                        ...ONE_MESSAGE, 
-                                        ...createdMessage
-                                    }
-                                }
-                                return ONE_MESSAGE;
-                            }))
-                            // Обновить сообщение потому что мы получили настоящий id
-                        })
-            .catch(error => {
-                console.log('Error fatching data:', error);
-                setPosts((allMessageArray) => allMessageArray.filter((oneMessage) => {
-                    if (oneMessage.id === messageBody.id) {
-                        return false;
-                    }
-                    return true;
-                }));
-                // Удалить сообщенеи, потому что оно не доставлено
-            })
+        try {
+            const response = await fetch(`http://localhost:4000/messages/${userId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-type': 'application/json'
+                },
+                body: JSON.stringify(messageBody),
+            });
+            if (!response.ok) {
+                throw new Error("HTTP status " + response.status);
+            }
+            const createdMessage = await response.json();
+
+            setPosts((allMessageArray) => allMessageArray.map((oneMessage) => {
+                if (oneMessage.id === messageBody.id) {
+                    return {
+                        ...oneMessage,
+                        ...createdMessage
+                    };
+                }
+                return oneMessage;
+            }));
+        } catch (error) {
+            console.log('Error fatching data:', error);
+            setPosts((allMessageArray) => allMessageArray.filter((oneMessage) => {
+                if (oneMessage.id === messageBody.id) {
+                    return false;
+                }
+                return true;
+            }));
+        }
     }
 
     const month = {
@@ -162,7 +162,7 @@ export function MessageWindow({ show }) {
             addPost(event);
         }
     };
-    // For modal window
+
     const handleFileChange = (event) => {
         const reader = new FileReader();
         reader.onload = () => {
@@ -181,8 +181,6 @@ export function MessageWindow({ show }) {
         inputRef.current.click();
         inputRef.current.value = null;
     };
-
-    // перетаскивание файла
 
     return (
         <div className={classes.messageWindow}>
