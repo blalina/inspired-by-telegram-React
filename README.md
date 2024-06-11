@@ -1,13 +1,19 @@
-# Chat App appearance taken from telegram
+# Chat App
 
-This is a simple chat application created using React.js library working in Vite, with the view inspired by the popular messaging app Telegram.
+This is a simple chat application (spa) built with React.js using Vite, with the view inspired by the popular messaging app Telegram.
+
+Description:
+
+To fully utilize the API, clone the repository https://github.com/SuperOleg39/alina-api-mock-server and refer to the available methods documented at http://localhost:4000/api-docs.
 
 What the app can do:
 
-- search and select a user via search;
-- keep separate correspondence with users;
-- send messages and attach files to their messages. Attached files are displayed in the chat window along with the messages.
+- Searching and selecting users through a search feature.
+- Working with APIs: sending requests to the server and handling responses.
+- Keep separate correspondence with users.
+- Sending messages and attaching files, which are displayed in the chat window along with messages.
+- Retrieving coordinates and dynamically adjusting block width when resizing with the mouse.
 
 ## GitHub Pages
 
- You can take a look at the GitHub pages - https://blalina.github.io/inspired-by-telegram-React/
+You can take a look at the GitHub pages - https://blalina.github.io/inspired-by-telegram-React/

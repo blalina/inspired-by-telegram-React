@@ -114,7 +114,7 @@ export function MessageWindow({ show }) {
                 return oneMessage;
             }));
         } catch (error) {
-            console.log('Error fatching data:', error);
+            console.log('Error fetching data:', error);
             setPosts((allMessageArray) => allMessageArray.filter((oneMessage) => {
                 if (oneMessage.id === messageBody.id) {
                     return false;
