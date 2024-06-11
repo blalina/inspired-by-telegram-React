@@ -1,6 +1,6 @@
 # Chat App
 
-This is a simple chat application (spa) built with React.js using Vite, with the view inspired by the popular messaging app Telegram.
+SPA built with React.js using Vite, with the view inspired by the popular messaging app Telegram.
 
 Description:
 
