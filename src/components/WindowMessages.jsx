@@ -6,6 +6,7 @@ import { useRef } from "react";
 import { MessageBody } from "./Messages";
 import { ModalWindowToAttachAFile } from "./ModalWindows";
 import { UserContext } from "../Context";
+import { API_URL } from "../config";
 
 export function RightColumn({ show }) {
     return (
@@ -52,7 +53,9 @@ export function MessageWindow({ show }) {
     useEffect(() => {
         const abortController = new AbortController();
 
-        fetch(`http://localhost:4000/messages/${userId}`, { signal: abortController.signal })
+        if (userId === null) return;
+
+        fetch(`${API_URL}/messages/${userId}`, { signal: abortController.signal })
             .then(response => {
                 if (!response.ok) {
                     throw new Error("HTTP status " + response.status);
@@ -92,7 +95,7 @@ export function MessageWindow({ show }) {
         setPosts((currentPost) => [...currentPost, messageBody]);
 
         try {
-            const response = await fetch(`http://localhost:4000/messages/${userId}`, {
+            const response = await fetch(`${API_URL}/messages/${userId}`, {
                 method: 'POST',
                 headers: {
                     'Content-type': 'application/json'

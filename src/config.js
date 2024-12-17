@@ -1,0 +1,1 @@
+export const API_URL = "https://alina-api-mock-server.onrender.com";

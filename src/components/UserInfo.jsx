@@ -2,6 +2,7 @@ import React, { useContext, useEffect } from "react";
 import { useRef } from "react";
 import classes from "../modules_css/UserInfo.module.css";
 import { UserContext } from "../Context";
+import { API_URL } from "../config";
 
 export function getImageUrl(avatarImg) {
     return new URL(`../assets/images/${avatarImg}.jpeg`, import.meta.url).href;
@@ -13,7 +14,7 @@ export function UserInfo(props) {
     const chatListTitle = useRef();
     
     useEffect(() => {
-        fetch('http://localhost:4000/users/all')
+        fetch(`${API_URL}/users/all`)
             .then(response => {
                 if (!response.ok) {
                     throw new Error("HTTP status " + response.status);
